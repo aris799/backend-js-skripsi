@@ -6,6 +6,12 @@ const express = require("express");
 const cors = require('cors')
 const app = express();
 
+// Middleware untuk logging origin (debugging)
+app.use((req, res, next) => {
+  console.log('Request Origin:', req.get('origin'));
+  next();
+});
+
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -15,10 +21,12 @@ app.use(cors({
   origin: [
     'http://localhost:5173',   // Default Vite dev server
     'http://127.0.0.1:5173',   // Localhost variant
+    'https://srsik.vercel.app', // Tambahkan domain Vercel
     process.env.FRONTEND_URL || '*'  // Environment variable or wildcard
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true // Tambahkan ini untuk support kredensial
 }));
 
 // Routes (nanti akan dibuat)
